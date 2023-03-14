@@ -22,56 +22,48 @@ class CdkConfigNetworkStack(Stack):
             name="Public-1a",                                  
             subnet_type=_ec2.SubnetType.PUBLIC,
         )
-        subnetConfigurationPublic1a.apply_removal_policy(_removalpolicy.DESTROY)
 
         subnetConfigurationPublic1b=_ec2.SubnetConfiguration(
             cidr_mask=24,
             name="Public-1b",                                  
             subnet_type=_ec2.SubnetType.PUBLIC         
         )
-        subnetConfigurationPublic1b.apply_removal_policy(_removalpolicy.DESTROY)
 
         subnetConfigurationPrivate1a=_ec2.SubnetConfiguration(
             cidr_mask=24,
             name="Private-1a",                                  
             subnet_type=_ec2.SubnetType.PRIVATE_WITH_EGRESS
         )
-        subnetConfigurationPrivate1a.apply_removal_policy(_removalpolicy.DESTROY)
 
         subnetConfigurationPrivate1b=_ec2.SubnetConfiguration(
             cidr_mask=24,
             name="Private-1b",                                  
             subnet_type=_ec2.SubnetType.PRIVATE_WITH_EGRESS
         )
-        subnetConfigurationPrivate1b.apply_removal_policy(_removalpolicy.DESTROY)
 
         subnetConfigurationPrivateRds1a=_ec2.SubnetConfiguration(
             cidr_mask=24,
             name="Private-rds-1a",
             subnet_type=_ec2.SubnetType.PRIVATE_WITH_EGRESS
         )
-        subnetConfigurationPrivateRds1a.apply_removal_policy(_removalpolicy.DESTROY)
 
         subnetConfigurationPrivateRds1b=_ec2.SubnetConfiguration(
             cidr_mask=24,
             name="Private-rds-1b",                             
             subnet_type=_ec2.SubnetType.PRIVATE_WITH_EGRESS
         )
-        subnetConfigurationPrivateRds1b.apply_removal_policy(_removalpolicy.DESTROY)
 
         subnetConfigurationPrivateGWLBe1a=_ec2.SubnetConfiguration(
             cidr_mask=24,
             name="Private-GWLBe-1a",                                  
             subnet_type=_ec2.SubnetType.PRIVATE_ISOLATED
         )
-        subnetConfigurationPrivateGWLBe1a.apply_removal_policy(_removalpolicy.DESTROY)
 
         subnetConfigurationPrivateGWLBe1b=_ec2.SubnetConfiguration(
             cidr_mask=24,
             name="Private-GWLBe-1b",                                  
             subnet_type=_ec2.SubnetType.PRIVATE_ISOLATED
         )
-        subnetConfigurationPrivateGWLBe1b.apply_removal_policy(_removalpolicy.DESTROY)
 
         #create VPC
         vpc = _ec2.Vpc(self,
@@ -84,14 +76,14 @@ class CdkConfigNetworkStack(Stack):
                         vpc_name=vpcName,
                         max_azs=2,
                         subnet_configuration= [ 
-                            subnetConfigurationPublic1,
-                            subnetConfigurationPublic2,
-                            subnetConfigurationPrivate1,
-                            subnetConfigurationPrivate2,
-                            subnetConfigurationPrivate3,
-                            subnetConfigurationPrivate4,
-                            subnetConfigurationGWLBe1,
-                            subnetConfigurationGWLBe2                         
+                            subnetConfigurationPublic1a,
+                            subnetConfigurationPublic1b,
+                            subnetConfigurationPrivate1a,
+                            subnetConfigurationPrivate1b,
+                            subnetConfigurationPrivateRds1a,
+                            subnetConfigurationPrivateRds1b,
+                            subnetConfigurationPrivateGWLBe1a,
+                            subnetConfigurationPrivateGWLBe1b                         
                         ]
         )
         vpc.apply_removal_policy(_removalpolicy.DESTROY)

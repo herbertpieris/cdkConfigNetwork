@@ -16,17 +16,46 @@ class CdkConfigNetworkStack(Stack):
         vpcCidr = "192.168.0.0/20"
 
         # subnet configuration
-        subnetConfiguration1=_ec2.SubnetConfiguration(
+        subnetConfigurationPublic1=_ec2.SubnetConfiguration(
             cidr_mask=24,
-            name="ingress",                                  
-            subnet_type=_ec2.SubnetType.PUBLIC,
-            availabilityZones='us-east-1a'         
+            name="PUBLIC1",                                  
+            subnet_type=_ec2.SubnetType.PUBLIC         
         )
-        subnetConfiguration2=_ec2.SubnetConfiguration(
+        subnetConfigurationPublic2=_ec2.SubnetConfiguration(
             cidr_mask=24,
-            name="application",                                  
-            subnet_type=_ec2.SubnetType.PRIVATE_WITH_EGRESS            
+            name="PUBLIC2",                                  
+            subnet_type=_ec2.SubnetType.PUBLIC         
         )        
+        subnetConfigurationPrivate1=_ec2.SubnetConfiguration(
+            cidr_mask=24,
+            name="Private1",                                  
+            subnet_type=_ec2.SubnetType.PRIVATE_WITH_EGRESS
+        )
+        subnetConfigurationPrivate2=_ec2.SubnetConfiguration(
+            cidr_mask=24,
+            name="Private2",                                  
+            subnet_type=_ec2.SubnetType.PRIVATE_WITH_EGRESS
+        )
+        subnetConfigurationPrivate3=_ec2.SubnetConfiguration(
+            cidr_mask=24,
+            name="Private3",                                  
+            subnet_type=_ec2.SubnetType.PRIVATE_WITH_EGRESS
+        )
+        subnetConfigurationPrivate4=_ec2.SubnetConfiguration(
+            cidr_mask=24,
+            name="Private4",                                  
+            subnet_type=_ec2.SubnetType.PRIVATE_WITH_EGRESS
+        )
+        subnetConfigurationGWLBe1=_ec2.SubnetConfiguration(
+            cidr_mask=24,
+            name="GWLBe1",                                  
+            subnet_type=_ec2.SubnetType.PRIVATE_ISOLATED
+        )
+        subnetConfigurationGWLBe2=_ec2.SubnetConfiguration(
+            cidr_mask=24,
+            name="GWLBe2",                                  
+            subnet_type=_ec2.SubnetType.PRIVATE_ISOLATED
+        )                                      
 
         #create VPC
         vpc = _ec2.Vpc(self,
@@ -39,8 +68,14 @@ class CdkConfigNetworkStack(Stack):
                         vpc_name=vpcName,
                         max_azs=2,
                         subnet_configuration= [ 
-                            subnetConfiguration1,
-                            subnetConfiguration2
+                            subnetConfigurationPublic1,
+                            subnetConfigurationPublic2,
+                            subnetConfigurationPrivate1,
+                            subnetConfigurationPrivate2,
+                            subnetConfigurationPrivate3,
+                            subnetConfigurationPrivate4,
+                            subnetConfigurationGWLBe1,
+                            subnetConfigurationGWLBe2
                             # {
                             #     # cidr_mask=28,
                             #     name="rds", 

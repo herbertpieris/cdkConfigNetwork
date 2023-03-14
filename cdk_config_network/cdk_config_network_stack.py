@@ -17,7 +17,9 @@ class CdkConfigNetworkStack(Stack):
 
         # subnet configuration
         subnetConfiguration=_ec2.SubnetConfiguration(
-            name="subnet"
+            cidrMask=24,
+            name="ingress",                                  
+            subnet_type=_ec2.SubnetType.PUBLIC            
         )
 
         #create VPC
@@ -30,21 +32,22 @@ class CdkConfigNetworkStack(Stack):
                         # flow_logs=
                         vpc_name=vpcName,
                         max_azs=2,
-                        subnet_configuration=[
-                            { 
-                                # cidrMask=24,
-                                name="ingress",                                  
-                                subnet_type=_ec2.SubnetType.PUBLIC
-                            }, 
-                            {
-                                # cidr_mask=24, 
-                                name="application", 
-                                subnet_type=_ec2.SubnetType.PRIVATE_WITH_EGRESS
-                            }, 
-                            {
-                                # cidr_mask=28,
-                                name="rds", 
-                                subnet_type=_ec2.SubnetType.PRIVATE_ISOLATED
-                            }                           
+                        subnet_configuration= [ 
+                            subnetConfiguration
+                            # {             
+                            #     # cidrMask=24,
+                            #     name="ingress",                                  
+                            #     subnet_type=_ec2.SubnetType.PUBLIC
+                            # }, 
+                            # {
+                            #     # cidr_mask=24, 
+                            #     name="application", 
+                            #     subnet_type=_ec2.SubnetType.PRIVATE_WITH_EGRESS
+                            # }, 
+                            # {
+                            #     # cidr_mask=28,
+                            #     name="rds", 
+                            #     subnet_type=_ec2.SubnetType.PRIVATE_ISOLATED
+                            # }                           
                         ]
         )

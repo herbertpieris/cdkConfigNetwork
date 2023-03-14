@@ -32,7 +32,7 @@ class CdkConfigNetworkStack(Stack):
                         max_azs=2,
                         subnet_configuration=[
                             { 
-                                cidr_mask=24,
+                                cidrMask=24,
                                 name="ingress",                                  
                                 subnet_type=_ec2.SubnetType.PUBLIC
                             }, 

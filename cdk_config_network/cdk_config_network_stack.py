@@ -16,11 +16,16 @@ class CdkConfigNetworkStack(Stack):
         vpcCidr = "192.168.0.0/20"
 
         # subnet configuration
-        subnetConfiguration=_ec2.SubnetConfiguration(
+        subnetConfiguration1=_ec2.SubnetConfiguration(
             cidr_mask=24,
             name="ingress",                                  
             subnet_type=_ec2.SubnetType.PUBLIC            
         )
+        subnetConfiguration2=_ec2.SubnetConfiguration(
+            cidr_mask=24,
+            name="application",                                  
+            subnet_type=_ec2.SubnetType.PRIVATE_WITH_EGRESS            
+        )        
 
         #create VPC
         vpc = _ec2.Vpc(self,
@@ -33,17 +38,8 @@ class CdkConfigNetworkStack(Stack):
                         vpc_name=vpcName,
                         max_azs=2,
                         subnet_configuration= [ 
-                            subnetConfiguration
-                            # {             
-                            #     # cidrMask=24,
-                            #     name="ingress",                                  
-                            #     subnet_type=_ec2.SubnetType.PUBLIC
-                            # }, 
-                            # {
-                            #     # cidr_mask=24, 
-                            #     name="application", 
-                            #     subnet_type=_ec2.SubnetType.PRIVATE_WITH_EGRESS
-                            # }, 
+                            subnetConfiguration1,
+                            subnetConfiguration2
                             # {
                             #     # cidr_mask=28,
                             #     name="rds", 

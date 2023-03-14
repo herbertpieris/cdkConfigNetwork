@@ -15,6 +15,11 @@ class CdkConfigNetworkStack(Stack):
         vpcName = "poc-vpc"
         vpcCidr = "192.168.0.0/20"
 
+        # subnet configuration
+        subnetConfiguration=_ec2.SubnetConfiguration(
+            name="subnet"
+        )
+
         #create VPC
         vpc = _ec2.Vpc(self,
                         vpcName,
@@ -24,5 +29,22 @@ class CdkConfigNetworkStack(Stack):
                         enable_dns_support=True,
                         # flow_logs=
                         vpc_name=vpcName,
-                        max_azs=2                        
+                        max_azs=2,
+                        subnet_configuration=[
+                            { 
+                                cidr_mask=24,
+                                name="ingress",                                  
+                                subnet_type=_ec2.SubnetType.PUBLIC
+                            }, 
+                            {
+                                cidr_mask=24, 
+                                name="application", 
+                                subnet_type=_ec2.SubnetType.PRIVATE_WITH_EGRESS
+                            }, 
+                            {
+                                cidr_mask=28,
+                                name="rds", 
+                                subnet_type=_ec2.SubnetType.PRIVATE_ISOLATED
+                            }                           
+                        ]
         )

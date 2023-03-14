@@ -12,7 +12,7 @@ class CdkConfigNetworkStack(Stack):
         super().__init__(scope, construct_id, **kwargs)
 
         # The code that defines your stack goes here
-        vpcName = "japfa-poc-vpc"
+        vpcName = "poc-vpc"
         vpcCidr = "192.168.0.0/20"
 
         #create VPC

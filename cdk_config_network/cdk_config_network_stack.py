@@ -21,10 +21,6 @@ class CdkConfigNetworkStack(Stack):
             cidr_mask=24,
             name="PUBLIC1",                                  
             subnet_type=_ec2.SubnetType.PUBLIC,
-            subnet_tags={
-                "Environment": "Production",
-                "Application": "Backend"
-            }         
         )
         _tags.of(subnetConfigurationPublic1).add("StackType", "TheBest")
 

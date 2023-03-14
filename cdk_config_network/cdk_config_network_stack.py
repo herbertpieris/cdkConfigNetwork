@@ -17,46 +17,61 @@ class CdkConfigNetworkStack(Stack):
         vpcCidr = "192.168.0.0/20"
 
         # subnet configuration
-        subnetConfigurationPublic1=_ec2.SubnetConfiguration(
+        subnetConfigurationPublic1a=_ec2.SubnetConfiguration(
             cidr_mask=24,
             name="Public-1a",                                  
             subnet_type=_ec2.SubnetType.PUBLIC,
         )
-        subnetConfigurationPublic2=_ec2.SubnetConfiguration(
+        subnetConfigurationPublic1a.apply_removal_policy(_removalpolicy.DESTROY)
+
+        subnetConfigurationPublic1b=_ec2.SubnetConfiguration(
             cidr_mask=24,
             name="Public-1b",                                  
             subnet_type=_ec2.SubnetType.PUBLIC         
-        )        
-        subnetConfigurationPrivate1=_ec2.SubnetConfiguration(
+        )
+        subnetConfigurationPublic1b.apply_removal_policy(_removalpolicy.DESTROY)
+
+        subnetConfigurationPrivate1a=_ec2.SubnetConfiguration(
             cidr_mask=24,
             name="Private-1a",                                  
             subnet_type=_ec2.SubnetType.PRIVATE_WITH_EGRESS
         )
-        subnetConfigurationPrivate2=_ec2.SubnetConfiguration(
+        subnetConfigurationPrivate1a.apply_removal_policy(_removalpolicy.DESTROY)
+
+        subnetConfigurationPrivate1b=_ec2.SubnetConfiguration(
             cidr_mask=24,
             name="Private-1b",                                  
             subnet_type=_ec2.SubnetType.PRIVATE_WITH_EGRESS
         )
-        subnetConfigurationPrivate3=_ec2.SubnetConfiguration(
+        subnetConfigurationPrivate1b.apply_removal_policy(_removalpolicy.DESTROY)
+
+        subnetConfigurationPrivateRds1a=_ec2.SubnetConfiguration(
             cidr_mask=24,
             name="Private-rds-1a",
             subnet_type=_ec2.SubnetType.PRIVATE_WITH_EGRESS
         )
-        subnetConfigurationPrivate4=_ec2.SubnetConfiguration(
+        subnetConfigurationPrivateRds1a.apply_removal_policy(_removalpolicy.DESTROY)
+
+        subnetConfigurationPrivateRds1b=_ec2.SubnetConfiguration(
             cidr_mask=24,
             name="Private-rds-1b",                             
             subnet_type=_ec2.SubnetType.PRIVATE_WITH_EGRESS
         )
-        subnetConfigurationGWLBe1=_ec2.SubnetConfiguration(
+        subnetConfigurationPrivateRds1b.apply_removal_policy(_removalpolicy.DESTROY)
+
+        subnetConfigurationPrivateGWLBe1a=_ec2.SubnetConfiguration(
             cidr_mask=24,
             name="Private-GWLBe-1a",                                  
             subnet_type=_ec2.SubnetType.PRIVATE_ISOLATED
         )
-        subnetConfigurationGWLBe2=_ec2.SubnetConfiguration(
+        subnetConfigurationPrivateGWLBe1a.apply_removal_policy(_removalpolicy.DESTROY)
+
+        subnetConfigurationPrivateGWLBe1b=_ec2.SubnetConfiguration(
             cidr_mask=24,
             name="Private-GWLBe-1b",                                  
             subnet_type=_ec2.SubnetType.PRIVATE_ISOLATED
-        )                                      
+        )
+        subnetConfigurationPrivateGWLBe1b.apply_removal_policy(_removalpolicy.DESTROY)
 
         #create VPC
         vpc = _ec2.Vpc(self,
@@ -76,12 +91,7 @@ class CdkConfigNetworkStack(Stack):
                             subnetConfigurationPrivate3,
                             subnetConfigurationPrivate4,
                             subnetConfigurationGWLBe1,
-                            subnetConfigurationGWLBe2
-                            # {
-                            #     # cidr_mask=28,
-                            #     name="rds", 
-                            #     subnet_type=_ec2.SubnetType.PRIVATE_ISOLATED
-                            # }                           
+                            subnetConfigurationGWLBe2                         
                         ]
         )
         vpc.apply_removal_policy(_removalpolicy.DESTROY)

@@ -19,7 +19,8 @@ class CdkConfigNetworkStack(Stack):
         subnetConfiguration1=_ec2.SubnetConfiguration(
             cidr_mask=24,
             name="ingress",                                  
-            subnet_type=_ec2.SubnetType.PUBLIC            
+            subnet_type=_ec2.SubnetType.PUBLIC,
+            availabilityZones='us-east-1a'         
         )
         subnetConfiguration2=_ec2.SubnetConfiguration(
             cidr_mask=24,

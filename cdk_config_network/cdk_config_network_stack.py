@@ -1,6 +1,7 @@
 from aws_cdk import (
     # Duration,
     aws_ec2 as _ec2,
+    RemovalPolicy as _removalpolicy,
     Stack,
     # aws_sqs as sqs,
 )
@@ -83,3 +84,4 @@ class CdkConfigNetworkStack(Stack):
                             # }                           
                         ]
         )
+        vpc.apply_removal_policy(_removalpolicy.DESTROY)

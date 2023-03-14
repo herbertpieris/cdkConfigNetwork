@@ -18,42 +18,42 @@ class CdkConfigNetworkStack(Stack):
         # subnet configuration
         subnetConfigurationPublic1=_ec2.SubnetConfiguration(
             cidr_mask=24,
-            name="PUBLIC1",                                  
+            name="Public-1a",                                  
             subnet_type=_ec2.SubnetType.PUBLIC,
         )
         subnetConfigurationPublic2=_ec2.SubnetConfiguration(
             cidr_mask=24,
-            name="PUBLIC2",                                  
+            name="Public-1b",                                  
             subnet_type=_ec2.SubnetType.PUBLIC         
         )        
         subnetConfigurationPrivate1=_ec2.SubnetConfiguration(
             cidr_mask=24,
-            name="Private1",                                  
+            name="Private-1a",                                  
             subnet_type=_ec2.SubnetType.PRIVATE_WITH_EGRESS
         )
         subnetConfigurationPrivate2=_ec2.SubnetConfiguration(
             cidr_mask=24,
-            name="Private2",                                  
+            name="Private-1b",                                  
             subnet_type=_ec2.SubnetType.PRIVATE_WITH_EGRESS
         )
         subnetConfigurationPrivate3=_ec2.SubnetConfiguration(
             cidr_mask=24,
-            name="Private3",                                  
+            name="Private-rds-1a",
             subnet_type=_ec2.SubnetType.PRIVATE_WITH_EGRESS
         )
         subnetConfigurationPrivate4=_ec2.SubnetConfiguration(
             cidr_mask=24,
-            name="Private4",                                  
+            name="Private-rds-1b",                             
             subnet_type=_ec2.SubnetType.PRIVATE_WITH_EGRESS
         )
         subnetConfigurationGWLBe1=_ec2.SubnetConfiguration(
             cidr_mask=24,
-            name="GWLBe1",                                  
+            name="Private-GWLBe-1a",                                  
             subnet_type=_ec2.SubnetType.PRIVATE_ISOLATED
         )
         subnetConfigurationGWLBe2=_ec2.SubnetConfiguration(
             cidr_mask=24,
-            name="GWLBe2",                                  
+            name="Private-GWLBe-1b",                                  
             subnet_type=_ec2.SubnetType.PRIVATE_ISOLATED
         )                                      
 

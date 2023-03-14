@@ -1,6 +1,7 @@
 from aws_cdk import (
     # Duration,
     aws_ec2 as _ec2,
+    Tags as _tags
     Stack,
     # aws_sqs as sqs,
 )
@@ -25,6 +26,8 @@ class CdkConfigNetworkStack(Stack):
                 "Application": "Backend"
             }         
         )
+        _tags.of(subnetConfigurationPublic1).add("StackType", "TheBest")
+
         subnetConfigurationPublic2=_ec2.SubnetConfiguration(
             cidr_mask=24,
             name="PUBLIC2",                                  

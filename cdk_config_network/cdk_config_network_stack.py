@@ -17,7 +17,7 @@ class CdkConfigNetworkStack(Stack):
 
         # subnet configuration
         subnetConfiguration=_ec2.SubnetConfiguration(
-            cidrMask=24,
+            cidr_mask=24,
             name="ingress",                                  
             subnet_type=_ec2.SubnetType.PUBLIC            
         )

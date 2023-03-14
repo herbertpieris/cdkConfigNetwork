@@ -19,7 +19,11 @@ class CdkConfigNetworkStack(Stack):
         subnetConfigurationPublic1=_ec2.SubnetConfiguration(
             cidr_mask=24,
             name="PUBLIC1",                                  
-            subnet_type=_ec2.SubnetType.PUBLIC         
+            subnet_type=_ec2.SubnetType.PUBLIC,
+            subnet_tags={
+                "Environment": "Production",
+                "Application": "Backend"
+            }         
         )
         subnetConfigurationPublic2=_ec2.SubnetConfiguration(
             cidr_mask=24,

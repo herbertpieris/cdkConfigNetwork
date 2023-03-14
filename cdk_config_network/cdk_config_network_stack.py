@@ -1,7 +1,7 @@
 from aws_cdk import (
     # Duration,
     aws_ec2 as _ec2,
-    Tags as _tags
+    Tags as _tags,
     Stack,
     # aws_sqs as sqs,
 )

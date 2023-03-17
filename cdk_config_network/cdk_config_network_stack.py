@@ -13,8 +13,11 @@ class CdkConfigNetworkStack(Stack):
         super().__init__(scope, construct_id, **kwargs)
 
         # The code that defines your stack goes here
+
+        #variable
         vpcName = "poc-vpc"
         vpcCidr = "192.168.0.0/20"
+        OnGWLBeSubnet = True # True or Flase
 
         # subnet configuration
         subnetConfigurationPublic1a=_ec2.SubnetConfiguration(
@@ -69,21 +72,21 @@ class CdkConfigNetworkStack(Stack):
         vpc = _ec2.Vpc(self,
                         vpcName,
                         ip_addresses=_ec2.IpAddresses.cidr(vpcCidr),
-                        default_instance_tenancy=_ec2.DefaultInstanceTenancy.DEFAULT,
-                        enable_dns_hostnames=True,
-                        enable_dns_support=True,
-                        # flow_logs=
-                        vpc_name=vpcName,
-                        max_azs=2,
-                        subnet_configuration= [ 
-                            subnetConfigurationPublic1a,
-                            subnetConfigurationPublic1b,
-                            subnetConfigurationPrivate1a,
-                            subnetConfigurationPrivate1b,
-                            subnetConfigurationPrivateRds1a,
-                            subnetConfigurationPrivateRds1b,
-                            subnetConfigurationPrivateGWLBe1a,
-                            subnetConfigurationPrivateGWLBe1b                         
-                        ]
+                        # default_instance_tenancy=_ec2.DefaultInstanceTenancy.DEFAULT,
+                        # enable_dns_hostnames=True,
+                        # enable_dns_support=True,
+                        # # flow_logs=
+                        # vpc_name=vpcName,
+                        # max_azs=2,
+                        # subnet_configuration= [ 
+                        #     subnetConfigurationPublic1a,
+                        #     subnetConfigurationPublic1b,
+                        #     subnetConfigurationPrivate1a,
+                        #     subnetConfigurationPrivate1b,
+                        #     subnetConfigurationPrivateRds1a,
+                        #     subnetConfigurationPrivateRds1b,
+                        #     subnetConfigurationPrivateGWLBe1a,
+                        #     subnetConfigurationPrivateGWLBe1b                         
+                        # ]
         )
         vpc.apply_removal_policy(_removalpolicy.DESTROY)

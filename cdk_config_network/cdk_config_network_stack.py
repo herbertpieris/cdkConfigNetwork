@@ -78,6 +78,7 @@ class CdkConfigNetworkStack(Stack):
                         # # flow_logs=
                         # vpc_name=vpcName,
                         # max_azs=2,
+                        subnet_configuration= []                        
                         # subnet_configuration= [ 
                         #     subnetConfigurationPublic1a,
                         #     subnetConfigurationPublic1b,

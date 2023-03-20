@@ -64,7 +64,7 @@ class CdkConfigNetworkStack(Stack):
         #create route table
         route_table = _ec2.CfnRouteTable(
             self, "MyRouteTable",
-            vpc=vpc.vpc_id,
+            vpc_id=vpc.vpc_id,
         )        
 
         #create subnet

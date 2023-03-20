@@ -98,6 +98,7 @@ class CdkConfigNetworkStack(Stack):
         subnet = _ec2.Subnet(
             self,
             subnetName,
+            availability_zone="us-east-1a",
             cidr_block=subnetCidr,
             vpc_id = vpcName,            
             map_public_ip_on_launch=False

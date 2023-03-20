@@ -2,6 +2,7 @@ from aws_cdk import (
     # Duration,
     aws_ec2 as _ec2,
     RemovalPolicy as _removalpolicy,
+    core as _core,
     Stack,
     # aws_sqs as sqs,
 )
@@ -65,6 +66,11 @@ class CdkConfigNetworkStack(Stack):
         route_table1 = _ec2.CfnRouteTable(
             self, "MyRouteTable",
             vpc_id=vpc.vpc_id,
+
+            tags=[_core.CfnTag(
+                key="Name",
+                value="MyRouteTable"
+            )]            
         )
         route_table1.apply_removal_policy(_removalpolicy.DESTROY)
 

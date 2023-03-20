@@ -17,6 +17,8 @@ class CdkConfigNetworkStack(Stack):
         #variable
         vpcName = "poc-vpc"
         vpcCidr = "192.168.0.0/20"
+        subnetName = "poc-vpc-1a-public"
+        subnetCidr = "192.168.0.0/24"
         OnGWLBeSubnet = True # True or Flase
 
         # subnet configuration
@@ -91,3 +93,13 @@ class CdkConfigNetworkStack(Stack):
                         # ]
         )
         vpc.apply_removal_policy(_removalpolicy.DESTROY)
+
+        #create subnet
+        subnet = _ec2.Subnet(
+            self,
+            subnetName,
+            cidr_block=subnetCidr,
+            vpc_id = vpcName,            
+            map_public_ip_on_launch=False
+        )
+        subnet.apply_removal_policy(_removalpolicy.DESTROY)

@@ -17,58 +17,25 @@ class CdkConfigNetworkStack(Stack):
         #variable
         vpcName = "poc-vpc"
         vpcCidr = "192.168.0.0/20"
-        subnetName = "poc-vpc-1a-public"
-        subnetCidr = "192.168.0.0/24"
+        subnetPublic1aName = vpcName + "-1a-public"
+        subnetPublic1aCidr = "192.168.0.0/24"
+        subnetPublic1bName = vpcName + "-1b-public"
+        subnetPublic1bCidr = "192.168.1.0/24"
+        subnetPrivate1aName01 = vpcName + "-1a-private-01"
+        subnetPrivate1aCidr01 = "192.168.2.0/24"
+        subnetPrivate1bName02 = vpcName + "-1b-private-02"
+        subnetPrivatec1bCidr02 = "192.168.3.0/24"
+        subnetPrivate1aName03 = vpcName + "-1a-private-03"
+        subnetPrivate1aCidr03 = "192.168.4.0/24"
+        subnetPrivate1bName04 = vpcName + "-1b-private-04"
+        subnetPrivatec1bCidr04 = "192.168.5.0/24"
+        subnetPrivateGWLB1aName = vpcName + "-1a-private-gwlb"
+        subnetPrivateGWLB1aCidr = "192.168.6.0/24"
+        subnetPrivateGWLB1bName = vpcName + "-1b-private-gwlb"
+        subnetPrivatecGWLB1bCidr = "192.168.7.0/24"                                
+        subnetAZ1a = "us-east-1a"
+        subnetAZ1b = "us-east-1b"
         OnGWLBeSubnet = True # True or Flase
-
-        # subnet configuration
-        subnetConfigurationPublic1a=_ec2.SubnetConfiguration(
-            cidr_mask=24,
-            name="Public-1a",                                  
-            subnet_type=_ec2.SubnetType.PUBLIC,
-        )
-
-        subnetConfigurationPublic1b=_ec2.SubnetConfiguration(
-            cidr_mask=24,
-            name="Public-1b",                                  
-            subnet_type=_ec2.SubnetType.PUBLIC         
-        )
-
-        subnetConfigurationPrivate1a=_ec2.SubnetConfiguration(
-            cidr_mask=24,
-            name="Private-1a",                                  
-            subnet_type=_ec2.SubnetType.PRIVATE_WITH_EGRESS
-        )
-
-        subnetConfigurationPrivate1b=_ec2.SubnetConfiguration(
-            cidr_mask=24,
-            name="Private-1b",                                  
-            subnet_type=_ec2.SubnetType.PRIVATE_WITH_EGRESS
-        )
-
-        subnetConfigurationPrivateRds1a=_ec2.SubnetConfiguration(
-            cidr_mask=24,
-            name="Private-rds-1a",
-            subnet_type=_ec2.SubnetType.PRIVATE_WITH_EGRESS
-        )
-
-        subnetConfigurationPrivateRds1b=_ec2.SubnetConfiguration(
-            cidr_mask=24,
-            name="Private-rds-1b",                             
-            subnet_type=_ec2.SubnetType.PRIVATE_WITH_EGRESS
-        )
-
-        subnetConfigurationPrivateGWLBe1a=_ec2.SubnetConfiguration(
-            cidr_mask=24,
-            name="Private-GWLBe-1a",                                  
-            subnet_type=_ec2.SubnetType.PRIVATE_ISOLATED
-        )
-
-        subnetConfigurationPrivateGWLBe1b=_ec2.SubnetConfiguration(
-            cidr_mask=24,
-            name="Private-GWLBe-1b",                                  
-            subnet_type=_ec2.SubnetType.PRIVATE_ISOLATED
-        )
 
         #create VPC
         vpc = _ec2.Vpc(self,

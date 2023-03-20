@@ -80,4 +80,14 @@ class CdkConfigNetworkStack(Stack):
             vpc_id = vpc.vpc_id,            
             map_public_ip_on_launch=False
         )
-        subnetPublic1b.apply_removal_policy(_removalpolicy.DESTROY)        
+        subnetPublic1b.apply_removal_policy(_removalpolicy.DESTROY)
+
+        subnetPrivate1a01 = _ec2.Subnet(
+            self,
+            subnetPrivate1aName01,
+            availability_zone=subnetAZ1a,
+            cidr_block=subnetPrivate1aCidr01,
+            vpc_id = vpc.vpc_id,            
+            map_public_ip_on_launch=False
+        )
+        subnetPrivate1a01.apply_removal_policy(_removalpolicy.DESTROY)              

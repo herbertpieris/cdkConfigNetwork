@@ -76,6 +76,7 @@ class CdkConfigNetworkStack(Stack):
             vpc_id = vpc.vpc_id,            
             map_public_ip_on_launch=False
         )
+        subnetPublic1a.route_table(route_table)
         subnetPublic1a.apply_removal_policy(_removalpolicy.DESTROY)
 
         subnetPublic1b = _ec2.Subnet(

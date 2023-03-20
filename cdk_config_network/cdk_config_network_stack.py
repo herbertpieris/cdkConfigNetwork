@@ -2,7 +2,6 @@ from aws_cdk import (
     # Duration,
     aws_ec2 as _ec2,
     RemovalPolicy as _removalpolicy,
-    core as _core,
     Stack,
     # aws_sqs as sqs,
 )

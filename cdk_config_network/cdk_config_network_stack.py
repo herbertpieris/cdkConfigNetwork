@@ -64,12 +64,7 @@ class CdkConfigNetworkStack(Stack):
         #create route table
         route_table1 = _ec2.CfnRouteTable(
             self, "MyRouteTable",
-            vpc_id=vpc.vpc_id,
-
-            tags=[_core.CfnTag(
-                key="Name",
-                value="MyRouteTable"
-            )]            
+            vpc_id=vpc.vpc_id        
         )
         route_table1.apply_removal_policy(_removalpolicy.DESTROY)
 

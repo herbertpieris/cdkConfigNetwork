@@ -62,12 +62,22 @@ class CdkConfigNetworkStack(Stack):
         vpc.apply_removal_policy(_removalpolicy.DESTROY)
 
         #create subnet
-        subnet = _ec2.Subnet(
+        subnetPublic1a = _ec2.Subnet(
             self,
-            subnetName,
-            availability_zone="us-east-1a",
-            cidr_block=subnetCidr,
+            subnetPublic1aName,
+            availability_zone=subnetAZ1a,
+            cidr_block=subnetPublic1aCidr,
             vpc_id = vpc.vpc_id,            
             map_public_ip_on_launch=False
         )
-        subnet.apply_removal_policy(_removalpolicy.DESTROY)
+        subnetPublic1a.apply_removal_policy(_removalpolicy.DESTROY)
+
+        subnetPublic1b = _ec2.Subnet(
+            self,
+            subnetPublic1bName,
+            availability_zone=subnetAZ1b,
+            cidr_block=subnetPublic1bCidr,
+            vpc_id = vpc.vpc_id,            
+            map_public_ip_on_launch=False
+        )
+        subnetPublic1b.apply_removal_policy(_removalpolicy.DESTROY)        

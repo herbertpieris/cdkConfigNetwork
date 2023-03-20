@@ -62,7 +62,7 @@ class CdkConfigNetworkStack(Stack):
         vpc.apply_removal_policy(_removalpolicy.DESTROY)
 
         #create route table
-        route_table = _ec2.RouteTable(
+        route_table = _ec2.CfnRouteTable(
             self, "MyRouteTable",
             vpc=vpc.vpc_id,
         )        

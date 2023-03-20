@@ -77,7 +77,7 @@ class CdkConfigNetworkStack(Stack):
                         # enable_dns_support=True,
                         # # flow_logs=
                         # vpc_name=vpcName,
-                        # max_azs=2,
+                        max_azs=0,
                         subnet_configuration= []                        
                         # subnet_configuration= [ 
                         #     subnetConfigurationPublic1a,

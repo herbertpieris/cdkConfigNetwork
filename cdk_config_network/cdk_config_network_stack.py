@@ -100,7 +100,7 @@ class CdkConfigNetworkStack(Stack):
             subnetName,
             availability_zone="us-east-1a",
             cidr_block=subnetCidr,
-            vpc_id = vpcName,            
+            vpc_id = vpc.vpc_id,            
             map_public_ip_on_launch=False
         )
         subnet.apply_removal_policy(_removalpolicy.DESTROY)

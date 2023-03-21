@@ -69,20 +69,20 @@ class CdkConfigNetworkStack(Stack):
         route_table1.apply_removal_policy(_removalpolicy.DESTROY)
 
         #create subnet
-        subnetPublic1a = _ec2.Subnet(
-            self,
-            subnetPublic1aName,
-            availability_zone=subnetAZ1a,
-            cidr_block=subnetPublic1aCidr,
-            vpc_id = vpc.vpc_id,            
-            map_public_ip_on_launch=False
-        )
-        subnetPublic1a.apply_removal_policy(_removalpolicy.DESTROY)
+        # subnetPublic1a = _ec2.Subnet(
+        #     self,
+        #     subnetPublic1aName,
+        #     availability_zone=subnetAZ1a,
+        #     cidr_block=subnetPublic1aCidr,
+        #     vpc_id = vpc.vpc_id,            
+        #     map_public_ip_on_launch=False
+        # )
+        # subnetPublic1a.apply_removal_policy(_removalpolicy.DESTROY)
 
-        subnetPublic1aAttr = _ec2.SubnetAttributes(
-            subnet_id = subnetPublic1a.subnet_id,
-            route_table_id=route_table1.attr_route_table_id
-        )
+        # subnetPublic1aAttr = _ec2.SubnetAttributes(
+        #     subnet_id = subnetPublic1a.subnet_id,
+        #     route_table_id=route_table1.attr_route_table_id
+        # )
 
         # subnetPublic1b = _ec2.Subnet(
         #     self,

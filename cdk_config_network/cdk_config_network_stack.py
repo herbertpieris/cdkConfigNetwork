@@ -68,8 +68,8 @@ class CdkConfigNetworkStack(Stack):
             vpc_id=vpc.vpc_id,
 
             tags=[_CfnTag(
-                key="key",
-                value="value"
+                key="Name",
+                value="MyRouteTable"
             )]            
         )
         route_table1.apply_removal_policy(_removalpolicy.DESTROY)

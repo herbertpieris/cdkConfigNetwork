@@ -86,6 +86,7 @@ class CdkConfigNetworkStack(Stack):
         route_tablePrivate.apply_removal_policy(_removalpolicy.DESTROY)        
 
         #create subnet
+        
         subnetPublic1a = _ec2.PublicSubnet(
             self, 
             subnetPublic1aName,

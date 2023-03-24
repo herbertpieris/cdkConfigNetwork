@@ -125,7 +125,7 @@ class CdkConfigNetworkStack(Stack):
 
         subnetPrivate1b02 = _ec2.CfnSubnet(
             self,
-            subnetPrivate1b02,
+            subnetPrivate1bName02,
             vpc_id = vpc.attr_vpc_id,
             availability_zone=subnetAZ1b,
             cidr_block=subnetPrivatec1bCidr02            

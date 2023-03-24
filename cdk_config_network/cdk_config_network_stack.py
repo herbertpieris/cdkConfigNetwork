@@ -70,27 +70,27 @@ class CdkConfigNetworkStack(Stack):
         # vpc.apply_removal_policy(_removalpolicy.DESTROY)
 
         #create route table
-        # route_tablePublic = _ec2.CfnRouteTable(
-        #     self, "RouteTablePublic",
-        #     vpc_id=vpc.vpc_id,
+        route_tablePublic = _ec2.CfnRouteTable(
+            self, "RouteTablePublic",
+            vpc_id=vpc.vpc_id,
 
-        #     tags=[_CfnTag(
-        #         key="Name",
-        #         value=vpcName+"-"+"RouteTablePublic"
-        #     )]            
-        # )
-        # route_tablePublic.apply_removal_policy(_removalpolicy.DESTROY)
+            tags=[_CfnTag(
+                key="Name",
+                value=vpcName+"-"+"RouteTablePublic"
+            )]            
+        )
+        route_tablePublic.apply_removal_policy(_removalpolicy.DESTROY)
 
-        # route_tablePrivate = _ec2.CfnRouteTable(
-        #     self, "RouteTablePrivate",
-        #     vpc_id=vpc.vpc_id,
+        route_tablePrivate = _ec2.CfnRouteTable(
+            self, "RouteTablePrivate",
+            vpc_id=vpc.vpc_id,
 
-        #     tags=[_CfnTag(
-        #         key="Name",
-        #         value=vpcName+"-"+"RouteTablePrivate"
-        #     )]            
-        # )
-        # route_tablePrivate.apply_removal_policy(_removalpolicy.DESTROY)        
+            tags=[_CfnTag(
+                key="Name",
+                value=vpcName+"-"+"RouteTablePrivate"
+            )]            
+        )
+        route_tablePrivate.apply_removal_policy(_removalpolicy.DESTROY)        
 
         #create subnet
         # subnetPublic1a = _ec2.PublicSubnet(

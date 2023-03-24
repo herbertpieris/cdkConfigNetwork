@@ -103,7 +103,7 @@ class CdkConfigNetworkStack(Stack):
             self,
             "EC2SubnetRouteTableAssociation",
             route_table_id=route_tablePublic.ref,
-            subnet_id=subnetPublic1a.ref
+            subnet_id=subnetPublic1a.subnet_id
         )
 
         # subnetPublic1a = _ec2.Subnet(

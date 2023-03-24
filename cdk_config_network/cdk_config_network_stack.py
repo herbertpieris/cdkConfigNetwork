@@ -77,7 +77,12 @@ class CdkConfigNetworkStack(Stack):
             subnetPublic1aName,
             vpc_id = vpc.attr_vpc_id,
             availability_zone=subnetAZ1a,
-            cidr_block=subnetPublic1aCidr            
+            cidr_block=subnetPublic1aCidr,
+
+            tags=[_CfnTag(
+                key="Name",
+                value=vpcName+"-"+"subnetPublic1a"
+            )]
         )
         subnetPublic1a.apply_removal_policy(_removalpolicy.DESTROY)
 
@@ -85,7 +90,7 @@ class CdkConfigNetworkStack(Stack):
             self,
             "subnetPublic1aRouteTableAssociation",
             route_table_id=route_tablePublic.ref,
-            subnet_id=subnetPublic1a.attr_subnet_id
+            subnet_id=subnetPublic1a.attr_subnet_id            
         )
         subnetPublic1aRouteTableAssociation.apply_removal_policy(_removalpolicy.DESTROY)
 
@@ -94,7 +99,12 @@ class CdkConfigNetworkStack(Stack):
             subnetPublic1bName,
             vpc_id = vpc.attr_vpc_id,
             availability_zone=subnetAZ1b,
-            cidr_block=subnetPublic1bCidr            
+            cidr_block=subnetPublic1bCidr,
+
+            tags=[_CfnTag(
+                key="Name",
+                value=vpcName+"-"+"subnetPublic1b"
+            )]            
         )
         subnetPublic1b.apply_removal_policy(_removalpolicy.DESTROY)
 
@@ -111,7 +121,12 @@ class CdkConfigNetworkStack(Stack):
             subnetPrivate1aName01,
             vpc_id = vpc.attr_vpc_id,
             availability_zone=subnetAZ1a,
-            cidr_block=subnetPrivate1aCidr01            
+            cidr_block=subnetPrivate1aCidr01,
+
+            tags=[_CfnTag(
+                key="Name",
+                value=vpcName+"-"+"subnetPrivate1a01"
+            )]
         )
         subnetPrivate1a01.apply_removal_policy(_removalpolicy.DESTROY)
 
@@ -128,7 +143,12 @@ class CdkConfigNetworkStack(Stack):
             subnetPrivate1bName02,
             vpc_id = vpc.attr_vpc_id,
             availability_zone=subnetAZ1b,
-            cidr_block=subnetPrivatec1bCidr02            
+            cidr_block=subnetPrivatec1bCidr02,
+
+            tags=[_CfnTag(
+                key="Name",
+                value=vpcName+"-"+"subnetPrivate1b02"
+            )]            
         )
         subnetPrivate1b02.apply_removal_policy(_removalpolicy.DESTROY)
 

@@ -106,12 +106,36 @@ class CdkConfigNetworkStack(Stack):
         )
         subnetPublic1bRouteTableAssociation.apply_removal_policy(_removalpolicy.DESTROY)
 
-        # subnetPrivate1a01 = _ec2.Subnet(
-        #     self,
-        #     subnetPrivate1aName01,
-        #     availability_zone=subnetAZ1a,
-        #     cidr_block=subnetPrivate1aCidr01,
-        #     vpc_id = vpc.vpc_id,            
-        #     map_public_ip_on_launch=False
-        # )
-        # subnetPrivate1a01.apply_removal_policy(_removalpolicy.DESTROY)              
+        subnetPrivate1a01 = _ec2.CfnSubnet(
+            self,
+            subnetPrivate1aName01,
+            vpc_id = vpc.attr_vpc_id,
+            availability_zone=subnetAZ1a,
+            cidr_block=subnetPrivate1aCidr01            
+        )
+        subnetPrivate1a01.apply_removal_policy(_removalpolicy.DESTROY)
+
+        subnetPrivate1a01RouteTableAssociation = _ec2.CfnSubnetRouteTableAssociation(
+            self,
+            "subnetPrivate1a01RouteTableAssociation",
+            route_table_id=route_tablePrivate.ref,
+            subnet_id=subnetPrivate1a01.attr_subnet_id
+        )
+        subnetPrivate1a01RouteTableAssociation.apply_removal_policy(_removalpolicy.DESTROY)
+
+        subnetPrivate1b02 = _ec2.CfnSubnet(
+            self,
+            subnetPrivate1b02,
+            vpc_id = vpc.attr_vpc_id,
+            availability_zone=subnetAZ1b,
+            cidr_block=subnetPrivatec1bCidr02            
+        )
+        subnetPrivate1b02.apply_removal_policy(_removalpolicy.DESTROY)
+
+        subnetPrivate1b02RouteTableAssociation = _ec2.CfnSubnetRouteTableAssociation(
+            self,
+            "subnetPrivate1b02RouteTableAssociation",
+            route_table_id=route_tablePrivate.ref,
+            subnet_id=subnetPrivate1b02.attr_subnet_id
+        )
+        subnetPrivate1b02RouteTableAssociation.apply_removal_policy(_removalpolicy.DESTROY)

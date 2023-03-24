@@ -16,12 +16,17 @@ class CdkConfigNetworkStack(Stack):
         # The code that defines your stack goes here
 
         #variable
+        ## VPC
         vpcName = "poc-vpc"
         vpcCidr = "192.168.0.0/20"
+        
+        ## Public subnet
         subnetPublic1aName = vpcName + "-1a-public"
         subnetPublic1aCidr = "192.168.0.0/24"
         subnetPublic1bName = vpcName + "-1b-public"
         subnetPublic1bCidr = "192.168.1.0/24"
+
+        ## Private subnet
         subnetPrivate1aName01 = vpcName + "-1a-private-01"
         subnetPrivate1aCidr01 = "192.168.2.0/24"
         subnetPrivate1bName02 = vpcName + "-1b-private-02"
@@ -30,13 +35,22 @@ class CdkConfigNetworkStack(Stack):
         subnetPrivate1aCidr03 = "192.168.4.0/24"
         subnetPrivate1bName04 = vpcName + "-1b-private-04"
         subnetPrivatec1bCidr04 = "192.168.5.0/24"
+
+        ## Private GWLB subnet 
         subnetPrivateGWLB1aName = vpcName + "-1a-private-gwlb"
         subnetPrivateGWLB1aCidr = "192.168.6.0/24"
         subnetPrivateGWLB1bName = vpcName + "-1b-private-gwlb"
         subnetPrivateGWLB1bCidr = "192.168.7.0/24"                                
+
+        ## vpc flow log
+        vpcFlowLogName = vpcName + "-flowlog"
+
+        ## AZs
         subnetAZ1a = "us-east-1a"
         subnetAZ1b = "us-east-1b"
-        OnGWLBeSubnet = False # True or Flase
+
+        ## condition
+        OnGWLBeSubnet = True # True or Flase
 
         #create VPC
         vpc = _ec2.CfnVPC(
@@ -255,4 +269,28 @@ class CdkConfigNetworkStack(Stack):
                 route_table_id=route_tablePrivate.ref,
                 subnet_id=subnetPrivateGWLB1b.attr_subnet_id
             )
-            subnetPrivateGWLB1bRouteTableAssociation.apply_removal_policy(_removalpolicy.DESTROY)                        
+            subnetPrivateGWLB1bRouteTableAssociation.apply_removal_policy(_removalpolicy.DESTROY)
+
+        #vpc flow log
+        vpcFlowLog = _ec2.CfnFlowLog(
+            self, 
+            vpcFlowLogName,
+            resource_id=vpc.attr_vpc_id,
+            resource_type="VPC",
+
+            # the properties below are optional
+            # deliver_logs_permission_arn="deliverLogsPermissionArn",
+            # destination_options=destination_options,
+            # log_destination="logDestination",
+            # log_destination_type="logDestinationType",
+            # log_format="logFormat",
+            # log_group_name="logGroupName",
+            # max_aggregation_interval=123,
+
+            tags=[_CfnTag(
+                key="Name",
+                value=vpcName+"-"+"vpcFlowLog"
+            )],
+            traffic_type="ALL"
+        )
+        vpcFlowLog.apply_removal_policy(_removalpolicy.DESTROY)

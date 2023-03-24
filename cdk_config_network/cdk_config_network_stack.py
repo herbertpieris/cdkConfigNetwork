@@ -72,7 +72,7 @@ class CdkConfigNetworkStack(Stack):
         #create route table
         route_tablePublic = _ec2.CfnRouteTable(
             self, "RouteTablePublic",
-            vpc_id=vpc.vpc_id,
+            vpc_id=vpc.attr_vpc_id,
 
             tags=[_CfnTag(
                 key="Name",

@@ -83,7 +83,7 @@ class CdkConfigNetworkStack(Stack):
 
         subnetPublic1aRouteTableAssociation = _ec2.CfnSubnetRouteTableAssociation(
             self,
-            "EC2SubnetRouteTableAssociation",
+            "subnetPublic1aRouteTableAssociation",
             route_table_id=route_tablePublic.ref,
             subnet_id=subnetPublic1a.attr_subnet_id
         )
@@ -100,7 +100,7 @@ class CdkConfigNetworkStack(Stack):
 
         subnetPublic1bRouteTableAssociation = _ec2.CfnSubnetRouteTableAssociation(
             self,
-            "EC2SubnetRouteTableAssociation",
+            "subnetPublic1bRouteTableAssociation",
             route_table_id=route_tablePublic.ref,
             subnet_id=subnetPublic1b.attr_subnet_id
         )

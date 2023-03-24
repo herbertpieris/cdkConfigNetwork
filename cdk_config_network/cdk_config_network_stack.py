@@ -44,7 +44,12 @@ class CdkConfigNetworkStack(Stack):
             vpcName,
             cidr_block=vpcCidr,
             enable_dns_hostnames=True,
-            enable_dns_support=True                                    
+            enable_dns_support=True,
+
+            tags=[_CfnTag(
+                key="Name",
+                value=vpcName
+            )]                   
         )
         vpc.apply_removal_policy(_removalpolicy.DESTROY)
 

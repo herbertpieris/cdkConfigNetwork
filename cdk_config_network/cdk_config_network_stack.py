@@ -39,72 +39,78 @@ class CdkConfigNetworkStack(Stack):
         OnGWLBeSubnet = True # True or Flase
 
         #create VPC
-        vpc = _ec2.Vpc(self,
-                        vpcName,
-                        ip_addresses=_ec2.IpAddresses.cidr(vpcCidr),
-                        # default_instance_tenancy=_ec2.DefaultInstanceTenancy.DEFAULT,
-                        # enable_dns_hostnames=True,
-                        # enable_dns_support=True,
-                        # # flow_logs=
-                        # vpc_name=vpcName,
-                        max_azs=0,
-                        subnet_configuration= []                        
-                        # subnet_configuration= [ 
-                        #     subnetConfigurationPublic1a,
-                        #     subnetConfigurationPublic1b,
-                        #     subnetConfigurationPrivate1a,
-                        #     subnetConfigurationPrivate1b,
-                        #     subnetConfigurationPrivateRds1a,
-                        #     subnetConfigurationPrivateRds1b,
-                        #     subnetConfigurationPrivateGWLBe1a,
-                        #     subnetConfigurationPrivateGWLBe1b                         
-                        # ]
+        vpc = _ec2.CfnVPC(
+            self,
+            vpcName,
+            cidr_block=vpcCidr,
+            enable_dns_hostnames=True,
+            enable_dns_support=True                                    
         )
-        vpc.apply_removal_policy(_removalpolicy.DESTROY)
+        # vpc = _ec2.Vpc(self,
+        #                 vpcName,
+        #                 ip_addresses=_ec2.IpAddresses.cidr(vpcCidr),
+        #                 # default_instance_tenancy=_ec2.DefaultInstanceTenancy.DEFAULT,
+        #                 # enable_dns_hostnames=True,
+        #                 # enable_dns_support=True,
+        #                 # # flow_logs=
+        #                 # vpc_name=vpcName,
+        #                 max_azs=0,
+        #                 subnet_configuration= []                        
+        #                 # subnet_configuration= [ 
+        #                 #     subnetConfigurationPublic1a,
+        #                 #     subnetConfigurationPublic1b,
+        #                 #     subnetConfigurationPrivate1a,
+        #                 #     subnetConfigurationPrivate1b,
+        #                 #     subnetConfigurationPrivateRds1a,
+        #                 #     subnetConfigurationPrivateRds1b,
+        #                 #     subnetConfigurationPrivateGWLBe1a,
+        #                 #     subnetConfigurationPrivateGWLBe1b                         
+        #                 # ]
+        # )
+        # vpc.apply_removal_policy(_removalpolicy.DESTROY)
 
         #create route table
-        route_tablePublic = _ec2.CfnRouteTable(
-            self, "RouteTablePublic",
-            vpc_id=vpc.vpc_id,
+        # route_tablePublic = _ec2.CfnRouteTable(
+        #     self, "RouteTablePublic",
+        #     vpc_id=vpc.vpc_id,
 
-            tags=[_CfnTag(
-                key="Name",
-                value=vpcName+"-"+"RouteTablePublic"
-            )]            
-        )
-        route_tablePublic.apply_removal_policy(_removalpolicy.DESTROY)
+        #     tags=[_CfnTag(
+        #         key="Name",
+        #         value=vpcName+"-"+"RouteTablePublic"
+        #     )]            
+        # )
+        # route_tablePublic.apply_removal_policy(_removalpolicy.DESTROY)
 
-        route_tablePrivate = _ec2.CfnRouteTable(
-            self, "RouteTablePrivate",
-            vpc_id=vpc.vpc_id,
+        # route_tablePrivate = _ec2.CfnRouteTable(
+        #     self, "RouteTablePrivate",
+        #     vpc_id=vpc.vpc_id,
 
-            tags=[_CfnTag(
-                key="Name",
-                value=vpcName+"-"+"RouteTablePrivate"
-            )]            
-        )
-        route_tablePrivate.apply_removal_policy(_removalpolicy.DESTROY)        
+        #     tags=[_CfnTag(
+        #         key="Name",
+        #         value=vpcName+"-"+"RouteTablePrivate"
+        #     )]            
+        # )
+        # route_tablePrivate.apply_removal_policy(_removalpolicy.DESTROY)        
 
         #create subnet
-        
-        subnetPublic1a = _ec2.PublicSubnet(
-            self, 
-            subnetPublic1aName,
-            availability_zone=subnetAZ1a,
-            cidr_block=subnetPublic1aCidr,
-            vpc_id=vpc.vpc_id,
+        # subnetPublic1a = _ec2.PublicSubnet(
+        #     self, 
+        #     subnetPublic1aName,
+        #     availability_zone=subnetAZ1a,
+        #     cidr_block=subnetPublic1aCidr,
+        #     vpc_id=vpc.vpc_id,
 
-            # the properties below are optional
-            map_public_ip_on_launch=False
-        )
-        subnetPublic1a.apply_removal_policy(_removalpolicy.DESTROY)
+        #     # the properties below are optional
+        #     map_public_ip_on_launch=False
+        # )
+        # subnetPublic1a.apply_removal_policy(_removalpolicy.DESTROY)
         
-        ec2subnetroutetableassociation = _ec2.CfnSubnetRouteTableAssociation(
-            self,
-            "EC2SubnetRouteTableAssociation",
-            route_table_id=route_tablePublic.ref,
-            subnet_id=subnetPublic1a.subnet_id
-        )
+        # ec2subnetroutetableassociation = _ec2.CfnSubnetRouteTableAssociation(
+        #     self,
+        #     "EC2SubnetRouteTableAssociation",
+        #     route_table_id=route_tablePublic.ref,
+        #     subnet_id=subnetPublic1a.subnet_id
+        # )
 
         # subnetPublic1a = _ec2.Subnet(
         #     self,

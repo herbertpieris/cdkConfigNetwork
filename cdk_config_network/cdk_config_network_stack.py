@@ -100,6 +100,16 @@ class CdkConfigNetworkStack(Stack):
             availability_zone=subnetAZ1a,
             cidr_block=subnetPublic1aCidr            
         )
+        subnetPublic1a.apply_removal_policy(_removalpolicy.DESTROY)
+
+        subnetPublic1aRouteTableAssociation = _ec2.CfnSubnetRouteTableAssociation(
+            self,
+            "EC2SubnetRouteTableAssociation",
+            route_table_id=route_tablePublic.ref,
+            subnet_id=subnetPublic1a.attr_subnet_id
+        )
+        subnetPublic1aRouteTableAssociation.apply_removal_policy(_removalpolicy.DESTROY)
+
         # subnetPublic1a = _ec2.PublicSubnet(
         #     self, 
         #     subnetPublic1aName,
@@ -111,13 +121,6 @@ class CdkConfigNetworkStack(Stack):
         #     map_public_ip_on_launch=False
         # )
         # subnetPublic1a.apply_removal_policy(_removalpolicy.DESTROY)
-        
-        # ec2subnetroutetableassociation = _ec2.CfnSubnetRouteTableAssociation(
-        #     self,
-        #     "EC2SubnetRouteTableAssociation",
-        #     route_table_id=route_tablePublic.ref,
-        #     subnet_id=subnetPublic1a.subnet_id
-        # )
 
         # subnetPublic1a = _ec2.Subnet(
         #     self,

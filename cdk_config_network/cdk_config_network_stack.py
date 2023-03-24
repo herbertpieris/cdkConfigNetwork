@@ -97,7 +97,8 @@ class CdkConfigNetworkStack(Stack):
             self,
             subnetPublic1aName,
             vpc_id = vpc.attr_vpc_id,
-            availability_zone=subnetAZ1a,            
+            availability_zone=subnetAZ1a,
+            cidr_block=subnetPublic1aCidr            
         )
         # subnetPublic1a = _ec2.PublicSubnet(
         #     self, 

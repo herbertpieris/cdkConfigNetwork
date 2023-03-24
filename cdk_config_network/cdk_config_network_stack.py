@@ -98,8 +98,13 @@ class CdkConfigNetworkStack(Stack):
             map_public_ip_on_launch=False
         )
         subnetPublic1a.apply_removal_policy(_removalpolicy.DESTROY)
-        subnetPublic1a.route_table(route_tablePublic.attr_route_table_id)
-
+        
+        ec2subnetroutetableassociation = _ec2.CfnSubnetRouteTableAssociation(
+            self,
+            "EC2SubnetRouteTableAssociation",
+            route_table_id=route_tablePublic.ref,
+            subnet_id=subnetPublic1a.ref
+        )
 
         # subnetPublic1a = _ec2.Subnet(
         #     self,

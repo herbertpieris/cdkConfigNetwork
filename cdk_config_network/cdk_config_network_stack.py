@@ -1,6 +1,8 @@
 from aws_cdk import (
     # Duration,
     aws_ec2 as _ec2,
+    aws_logs as _log,
+    aws_iam as _iam,
     RemovalPolicy as _removalpolicy,
     CfnTag as _CfnTag,
     Stack,
@@ -44,13 +46,18 @@ class CdkConfigNetworkStack(Stack):
 
         ## vpc flow log
         vpcFlowLogName = vpcName + "-flowlog"
+        logGroupName = 'VPCFlowLog'
+        logDestinationType="cloud-watch-logs", # cloud-watch-logs | s3
 
         ## AZs
         subnetAZ1a = "us-east-1a"
         subnetAZ1b = "us-east-1b"
 
-        ## condition
+        ## condition GWLB
         OnGWLBeSubnet = True # True or Flase
+
+        ## condition VPCFlowLog
+        OnFLowLog = True # True or Flase
 
         #create VPC
         vpc = _ec2.CfnVPC(
@@ -271,26 +278,59 @@ class CdkConfigNetworkStack(Stack):
             )
             subnetPrivateGWLB1bRouteTableAssociation.apply_removal_policy(_removalpolicy.DESTROY)
 
-        #vpc flow log
-        vpcFlowLog = _ec2.CfnFlowLog(
-            self, 
-            vpcFlowLogName,
-            resource_id=vpc.attr_vpc_id,
-            resource_type="VPC",
+        #vpc flow log        
+        if OnFLowLog:
+            vpcFlowLogIAMPolicyStatement = _iam.PolicyStatement(
+                actions=[
+                'logs:CreateLogStream',
+                'logs:PutLogEvents',
+                'logs:DescribeLogGroups',
+                'logs:DescribeLogStreams'
+                ],
+                resources=["*"]
+            )
+            vpcFlowLogIAMManagedPolicy = _iam.ManagedPolicy(
+                    self,
+                    "Flow-Logs-Policy",
+                    description="iam policy for Flow Log",
+                    managed_policy_name="Flow-Logs-Policy"
+                )
+            vpcFlowLogIAMManagedPolicy.add_statements(vpcFlowLogIAMPolicyStatement)
+            vpcFlowLogIAMManagedPolicy.apply_removal_policy(_removalpolicy.DESTROY)
 
-            # the properties below are optional
-            # deliver_logs_permission_arn="deliverLogsPermissionArn",
-            # destination_options=destination_options,
-            # log_destination="logDestination",
-            # log_destination_type="logDestinationType",
-            # log_format="logFormat",
-            # log_group_name="logGroupName",
-            # max_aggregation_interval=123,
+            vpcFlowLogIAMRole = _iam.Role(
+                    self,
+                    "Flow-Logs-Role",
+                    assumed_by=_iam.ServicePrincipal("vpc-flow-logs.amazonaws.com"),
+                    description="iam role for Flow Log",
+                    role_name="Flow-Logs-Role"
+                )
+            vpcFlowLogIAMRole.add_managed_policy(vpcFlowLogIAMManagedPolicy)
+            vpcFlowLogIAMRole.apply_removal_policy(_removalpolicy.DESTROY)            
 
-            tags=[_CfnTag(
-                key="Name",
-                value=vpcName+"-"+"vpcFlowLog"
-            )],
-            traffic_type="ALL"
-        )
-        vpcFlowLog.apply_removal_policy(_removalpolicy.DESTROY)
+            vpcFlowLogGroup = _log.LogGroup(
+                self,
+                log_group_name=logGroupName
+            )
+            vpcFlowLogGroup.apply_removal_policy(_removalpolicy.DESTROY)
+
+            vpcFlowLog = _ec2.CfnFlowLog(
+                self, 
+                vpcFlowLogName,
+                resource_id=vpc.attr_vpc_id,
+                resource_type="VPC",
+
+                # the properties below are optional
+                deliver_logs_permission_arn=vpcFlowLogIAMRole.role_arn,
+                log_destination=vpcFlowLogGroup.log_group_arn,
+                log_destination_type=logDestinationType,
+                log_group_name=logGroupName,
+                # max_aggregation_interval=123,
+
+                tags=[_CfnTag(
+                    key="Name",
+                    value=vpcName+"-"+"vpcFlowLog"
+                )],
+                traffic_type="ALL"
+            )
+            vpcFlowLog.apply_removal_policy(_removalpolicy.DESTROY)

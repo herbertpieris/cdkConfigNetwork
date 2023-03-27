@@ -47,7 +47,7 @@ class CdkConfigNetworkStack(Stack):
         ## vpc flow log
         vpcFlowLogName = vpcName + "-flowlog"
         logGroupName = 'VPCFlowLog'
-        logDestinationType="cloud-watch-logs", # cloud-watch-logs | s3
+        logDestinationType="cloud-watch-logs" # cloud-watch-logs | s3
 
         ## AZs
         subnetAZ1a = "us-east-1a"

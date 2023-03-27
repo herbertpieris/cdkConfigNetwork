@@ -325,7 +325,7 @@ class CdkConfigNetworkStack(Stack):
                 deliver_logs_permission_arn=vpcFlowLogIAMRole.role_arn,
                 log_destination=vpcFlowLogGroup.log_group_arn,
                 log_destination_type=logDestinationType,
-                log_group_name=logGroupName,
+                # log_group_name=logGroupName,
                 # max_aggregation_interval=123,
 
                 tags=[_CfnTag(

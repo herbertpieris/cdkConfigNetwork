@@ -310,6 +310,7 @@ class CdkConfigNetworkStack(Stack):
 
             vpcFlowLogGroup = _log.LogGroup(
                 self,
+                logGroupName,
                 log_group_name=logGroupName
             )
             vpcFlowLogGroup.apply_removal_policy(_removalpolicy.DESTROY)

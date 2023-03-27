@@ -48,6 +48,7 @@ class CdkConfigNetworkStack(Stack):
         vpcFlowLogName = vpcName + "-flowlog"
         logGroupName = 'VPCFlowLog'
         logDestinationType="s3" # cloud-watch-logs | s3
+        logDestinationS3Arn="arn:aws:s3:::herb-assets"
 
         ## AZs
         subnetAZ1a = "us-east-1a"
@@ -351,8 +352,7 @@ class CdkConfigNetworkStack(Stack):
                     resource_type="VPC",
 
                     # the properties below are optional
-                    deliver_logs_permission_arn=vpcFlowLogIAMRole.role_arn,
-                    log_destination=vpcFlowLogGroup.log_group_arn,
+                    log_destination=logDestinationS3Arn,
                     log_destination_type=logDestinationType,
                     # log_group_name=logGroupName,
                     # max_aggregation_interval=123,

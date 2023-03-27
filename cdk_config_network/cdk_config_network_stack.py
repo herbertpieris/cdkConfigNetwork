@@ -47,7 +47,7 @@ class CdkConfigNetworkStack(Stack):
         ## vpc flow log
         vpcFlowLogName = vpcName + "-flowlog"
         logGroupName = 'VPCFlowLog'
-        logDestinationType="cloud-watch-logs" # cloud-watch-logs | s3
+        logDestinationType="s3" # cloud-watch-logs | s3
 
         ## AZs
         subnetAZ1a = "us-east-1a"
@@ -280,58 +280,87 @@ class CdkConfigNetworkStack(Stack):
 
         #vpc flow log        
         if OnFLowLog:
-            vpcFlowLogIAMPolicyStatement = _iam.PolicyStatement(
-                actions=[
-                'logs:CreateLogStream',
-                'logs:PutLogEvents',
-                'logs:DescribeLogGroups',
-                'logs:DescribeLogStreams'
-                ],
-                resources=["*"]
-            )
-            vpcFlowLogIAMManagedPolicy = _iam.ManagedPolicy(
-                    self,
-                    "Flow-Logs-Policy",
-                    description="iam policy for Flow Log",
-                    managed_policy_name="Flow-Logs-Policy"
+            if logDestinationType=='cloud-watch-logs':
+                # policy statement
+                vpcFlowLogIAMPolicyStatement = _iam.PolicyStatement(
+                    actions=[
+                    'logs:CreateLogStream',
+                    'logs:PutLogEvents',
+                    'logs:DescribeLogGroups',
+                    'logs:DescribeLogStreams'
+                    ],
+                    resources=["*"]
                 )
-            vpcFlowLogIAMManagedPolicy.add_statements(vpcFlowLogIAMPolicyStatement)
-            vpcFlowLogIAMManagedPolicy.apply_removal_policy(_removalpolicy.DESTROY)
 
-            vpcFlowLogIAMRole = _iam.Role(
+                # managed policy
+                vpcFlowLogIAMManagedPolicy = _iam.ManagedPolicy(
+                        self,
+                        "Flow-Logs-Policy",
+                        description="iam policy for Flow Log",
+                        managed_policy_name="Flow-Logs-Policy"
+                    )
+                vpcFlowLogIAMManagedPolicy.add_statements(vpcFlowLogIAMPolicyStatement)
+                vpcFlowLogIAMManagedPolicy.apply_removal_policy(_removalpolicy.DESTROY)
+
+                # role
+                vpcFlowLogIAMRole = _iam.Role(
+                        self,
+                        "Flow-Logs-Role",
+                        assumed_by=_iam.ServicePrincipal("vpc-flow-logs.amazonaws.com"),
+                        description="iam role for Flow Log",
+                        role_name="Flow-Logs-Role"
+                    )
+                vpcFlowLogIAMRole.add_managed_policy(vpcFlowLogIAMManagedPolicy)
+                vpcFlowLogIAMRole.apply_removal_policy(_removalpolicy.DESTROY)            
+
+                # Log group
+                vpcFlowLogGroup = _log.LogGroup(
                     self,
-                    "Flow-Logs-Role",
-                    assumed_by=_iam.ServicePrincipal("vpc-flow-logs.amazonaws.com"),
-                    description="iam role for Flow Log",
-                    role_name="Flow-Logs-Role"
+                    logGroupName,
+                    log_group_name=logGroupName
                 )
-            vpcFlowLogIAMRole.add_managed_policy(vpcFlowLogIAMManagedPolicy)
-            vpcFlowLogIAMRole.apply_removal_policy(_removalpolicy.DESTROY)            
+                vpcFlowLogGroup.apply_removal_policy(_removalpolicy.DESTROY)
 
-            vpcFlowLogGroup = _log.LogGroup(
-                self,
-                logGroupName,
-                log_group_name=logGroupName
-            )
-            vpcFlowLogGroup.apply_removal_policy(_removalpolicy.DESTROY)
+                # Flow Log
+                vpcFlowLog = _ec2.CfnFlowLog(
+                    self, 
+                    vpcFlowLogName,
+                    resource_id=vpc.attr_vpc_id,
+                    resource_type="VPC",
 
-            vpcFlowLog = _ec2.CfnFlowLog(
-                self, 
-                vpcFlowLogName,
-                resource_id=vpc.attr_vpc_id,
-                resource_type="VPC",
+                    # the properties below are optional
+                    deliver_logs_permission_arn=vpcFlowLogIAMRole.role_arn,
+                    log_destination=vpcFlowLogGroup.log_group_arn,
+                    log_destination_type=logDestinationType,
+                    # log_group_name=logGroupName,
+                    # max_aggregation_interval=123,
 
-                # the properties below are optional
-                deliver_logs_permission_arn=vpcFlowLogIAMRole.role_arn,
-                log_destination=vpcFlowLogGroup.log_group_arn,
-                log_destination_type=logDestinationType,
-                # log_group_name=logGroupName,
-                # max_aggregation_interval=123,
+                    tags=[_CfnTag(
+                        key="Name",
+                        value=vpcName+"-"+"vpcFlowLog"
+                    )],
+                    traffic_type="ALL"
+                )
+                vpcFlowLog.apply_removal_policy(_removalpolicy.DESTROY)
+            elif logDestinationType=='s3':
+                # Flow Log
+                vpcFlowLog = _ec2.CfnFlowLog(
+                    self, 
+                    vpcFlowLogName,
+                    resource_id=vpc.attr_vpc_id,
+                    resource_type="VPC",
 
-                tags=[_CfnTag(
-                    key="Name",
-                    value=vpcName+"-"+"vpcFlowLog"
-                )],
-                traffic_type="ALL"
-            )
-            vpcFlowLog.apply_removal_policy(_removalpolicy.DESTROY)
+                    # the properties below are optional
+                    deliver_logs_permission_arn=vpcFlowLogIAMRole.role_arn,
+                    log_destination=vpcFlowLogGroup.log_group_arn,
+                    log_destination_type=logDestinationType,
+                    # log_group_name=logGroupName,
+                    # max_aggregation_interval=123,
+
+                    tags=[_CfnTag(
+                        key="Name",
+                        value=vpcName+"-"+"vpcFlowLog"
+                    )],
+                    traffic_type="ALL"
+                )
+                vpcFlowLog.apply_removal_policy(_removalpolicy.DESTROY)                

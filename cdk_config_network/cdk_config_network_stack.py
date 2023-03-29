@@ -63,6 +63,9 @@ class CdkConfigNetworkStack(Stack):
         ## condition VPCFlowLog
         OnFLowLog = True # True or Flase
 
+        ## condition NatGateway
+        OnNatGateway = True # True or Flase        
+
         #create VPC
         vpc = _ec2.CfnVPC(
             self,
@@ -95,7 +98,8 @@ class CdkConfigNetworkStack(Stack):
 
             # the properties below are optional
             internet_gateway_id=vpcIgw.attr_internet_gateway_id
-        )              
+        )
+        vpcIGWAttachment.apply_removal_policy(_removalpolicy.DESTROY)
 
         #create route table
         route_tablePublic = _ec2.CfnRouteTable(
@@ -300,6 +304,16 @@ class CdkConfigNetworkStack(Stack):
                 subnet_id=subnetPrivateGWLB1b.attr_subnet_id
             )
             subnetPrivateGWLB1bRouteTableAssociation.apply_removal_policy(_removalpolicy.DESTROY)
+
+        if OnNatGateway:
+            #IGW attached to VPC
+            natGateway = _ec2.CfnNatGateway(
+                self,
+                "natGateway",
+                subnet_id=subnetPublic1a.attr_subnet_id
+
+            )
+            natGateway.apply_removal_policy(_removalpolicy.DESTROY)
 
         #vpc flow log        
         if OnFLowLog:

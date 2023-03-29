@@ -87,7 +87,15 @@ class CdkConfigNetworkStack(Stack):
                 value=vpcName
             )]                   
         )
-        vpcIgw.apply_removal_policy(_removalpolicy.DESTROY)        
+        vpcIgw.apply_removal_policy(_removalpolicy.DESTROY)
+
+        #IGW attached to VPC
+        vpcIGWAttachment = _ec2.CfnVPCGatewayAttachment(self, vpcIGWAttachment,
+            vpc_id=vpc.attr_vpc_id,
+
+            # the properties below are optional
+            internet_gateway_id=vpcIgw.attr_internet_gateway_id
+        )              
 
         #create route table
         route_tablePublic = _ec2.CfnRouteTable(

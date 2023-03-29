@@ -90,7 +90,7 @@ class CdkConfigNetworkStack(Stack):
         vpcIgw.apply_removal_policy(_removalpolicy.DESTROY)
 
         #IGW attached to VPC
-        vpcIGWAttachment = _ec2.CfnVPCGatewayAttachment(self, vpcIGWAttachment,
+        vpcIGWAttachment = _ec2.CfnVPCGatewayAttachment(self, "vpcIGWAttachment",
             vpc_id=vpc.attr_vpc_id,
 
             # the properties below are optional

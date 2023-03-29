@@ -319,7 +319,7 @@ class CdkConfigNetworkStack(Stack):
                 self,
                 "natGateway",
                 subnet_id=subnetPublic1a.attr_subnet_id,
-                allocation_id=natElasticIp.attr_public_ip
+                allocation_id=natElasticIp.attr_allocation_id
 
             )
             natGateway.apply_removal_policy(_removalpolicy.DESTROY)

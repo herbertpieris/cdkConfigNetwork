@@ -22,6 +22,9 @@ class CdkConfigNetworkStack(Stack):
         vpcName = "poc-vpc"
         vpcCidr = "192.168.0.0/20"
         
+        ## IGW
+        vpcIgwName = "poc-vpc-igw"
+
         ## Public subnet
         subnetPublic1aName = vpcName + "-1a-public"
         subnetPublic1aCidr = "192.168.0.0/24"
@@ -74,6 +77,17 @@ class CdkConfigNetworkStack(Stack):
             )]                   
         )
         vpc.apply_removal_policy(_removalpolicy.DESTROY)
+
+        #create VPC IGW
+        vpcIgw = _ec2.CfnInternetGateway(
+            self,
+            vpcIgwName,
+            tags=[_CfnTag(
+                key="Name",
+                value=vpcName
+            )]                   
+        )
+        vpcIgw.apply_removal_policy(_removalpolicy.DESTROY)        
 
         #create route table
         route_tablePublic = _ec2.CfnRouteTable(

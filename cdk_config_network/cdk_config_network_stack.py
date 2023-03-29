@@ -306,11 +306,20 @@ class CdkConfigNetworkStack(Stack):
             subnetPrivateGWLB1bRouteTableAssociation.apply_removal_policy(_removalpolicy.DESTROY)
 
         if OnNatGateway:
-            #IGW attached to VPC
+            #Elastic IP
+            natElasticIp = _ec2.CfnEIP(
+                self, 
+                "natElasticIp",
+                domain="vpc"
+            )
+            natElasticIp.apply_removal_policy(_removalpolicy.DESTROY)
+
+            #NatGateway
             natGateway = _ec2.CfnNatGateway(
                 self,
                 "natGateway",
-                subnet_id=subnetPublic1a.attr_subnet_id
+                subnet_id=subnetPublic1a.attr_subnet_id,
+                allocation_id=natElasticIp.attr_public_ip
 
             )
             natGateway.apply_removal_policy(_removalpolicy.DESTROY)

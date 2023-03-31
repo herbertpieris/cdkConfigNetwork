@@ -124,10 +124,10 @@ class CdkConfigNetworkStack(Stack):
         )
         route_tablePrivate.apply_removal_policy(_removalpolicy.DESTROY)        
 
-        route_tablePrivateRoute = _ec2.CfnRoute(
+        route_tablePublicRoute = _ec2.CfnRoute(
             self, 
-            "route_tablePrivateRoute",
-            route_table_id=route_tablePrivateRoute.attr_route_table_id,
+            "route_tablePublicRoute",
+            route_table_id=route_tablePublic.attr_route_table_id,
 
             # the properties below are optional
             # carrier_gateway_id="carrierGatewayId",
@@ -143,7 +143,7 @@ class CdkConfigNetworkStack(Stack):
             # vpc_endpoint_id="vpcEndpointId",
             # vpc_peering_connection_id="vpcPeeringConnectionId"
         )
-        route_tablePrivateRoute.add_depends_on(route_tablePrivate)
+        route_tablePublicRoute.add_depends_on(route_tablePublic)
 
         #create subnet
         ## public

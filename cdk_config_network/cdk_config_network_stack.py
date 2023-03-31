@@ -345,6 +345,27 @@ class CdkConfigNetworkStack(Stack):
             )
             natGateway.apply_removal_policy(_removalpolicy.DESTROY)
 
+            route_tablePrivateRoute = _ec2.CfnRoute(
+                self, 
+                "route_tablePublicRoute",
+                route_table_id=route_tablePrivate.attr_route_table_id,
+
+                # the properties below are optional
+                # carrier_gateway_id="carrierGatewayId",
+                destination_cidr_block="0.0.0.0/0",
+                # destination_ipv6_cidr_block="destinationIpv6CidrBlock",
+                # egress_only_internet_gateway_id="egressOnlyInternetGatewayId",
+                # gateway_id=vpcIgw.attr_internet_gateway_id,
+                # instance_id="instanceId",
+                # local_gateway_id="localGatewayId",
+                nat_gateway_id=natGateway.attr_route_table_id,
+                # network_interface_id="networkInterfaceId",
+                # transit_gateway_id="transitGatewayId",
+                # vpc_endpoint_id="vpcEndpointId",
+                # vpc_peering_connection_id="vpcPeeringConnectionId"
+            )
+            route_tablePrivateRoute.add_depends_on(route_tablePrivate)            
+
         #vpc flow log        
         if OnFLowLog:
             if logDestinationType=='cloud-watch-logs':

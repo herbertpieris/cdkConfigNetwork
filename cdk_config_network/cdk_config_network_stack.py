@@ -143,7 +143,7 @@ class CdkConfigNetworkStack(Stack):
             # vpc_endpoint_id="vpcEndpointId",
             # vpc_peering_connection_id="vpcPeeringConnectionId"
         )
-        route_tablePublicRoute.addDependency(route_tablePublic)
+        route_tablePublicRoute.add_depends_on(route_tablePublic)
 
         #create subnet
         ## public

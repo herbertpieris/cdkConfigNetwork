@@ -358,7 +358,7 @@ class CdkConfigNetworkStack(Stack):
                 # gateway_id=vpcIgw.attr_internet_gateway_id,
                 # instance_id="instanceId",
                 # local_gateway_id="localGatewayId",
-                nat_gateway_id=natGateway.attr_route_table_id,
+                nat_gateway_id=natGateway.attr_nat_gateway_id,
                 # network_interface_id="networkInterfaceId",
                 # transit_gateway_id="transitGatewayId",
                 # vpc_endpoint_id="vpcEndpointId",

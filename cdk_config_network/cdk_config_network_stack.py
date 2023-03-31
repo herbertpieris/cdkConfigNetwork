@@ -131,7 +131,7 @@ class CdkConfigNetworkStack(Stack):
 
             # the properties below are optional
             # carrier_gateway_id="carrierGatewayId",
-            destination_cidr_block="0.0.0.0",
+            destination_cidr_block="0.0.0.0/0",
             # destination_ipv6_cidr_block="destinationIpv6CidrBlock",
             # egress_only_internet_gateway_id="egressOnlyInternetGatewayId",
             gateway_id=vpcIgw.attr_internet_gateway_id,

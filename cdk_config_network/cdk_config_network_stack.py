@@ -347,7 +347,7 @@ class CdkConfigNetworkStack(Stack):
 
             route_tablePrivateRoute = _ec2.CfnRoute(
                 self, 
-                "route_tablePublicRoute",
+                "route_tablePrivateRoute",
                 route_table_id=route_tablePrivate.attr_route_table_id,
 
                 # the properties below are optional

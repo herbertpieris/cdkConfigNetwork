@@ -510,4 +510,35 @@ class CdkConfigNetworkStack(Stack):
                 destination_cidr_block="192.168.0.0/16",
                 transit_gateway_id=TransitGatewayId,
             )
-            route_tablePrivateRouteOnPrem3.add_depends_on(route_tablePrivate)            
+            route_tablePrivateRouteOnPrem3.add_depends_on(route_tablePrivate)
+
+            route_tablePublicRouteOnPrem1 = _ec2.CfnRoute(
+                self, 
+                "route_tablePublicRouteOnPrem1",
+                route_table_id=route_tablePublic.attr_route_table_id,
+
+                # the properties below are optional
+                destination_cidr_block="10.0.0.0/8",
+                transit_gateway_id=TransitGatewayId,
+            )
+            route_tablePublicRouteOnPrem1.add_depends_on(route_tablePublic)
+            route_tablePublicRouteOnPrem2 = _ec2.CfnRoute(
+                self, 
+                "route_tablePublicRouteOnPrem2",
+                route_table_id=route_tablePublic.attr_route_table_id,
+
+                # the properties below are optional
+                destination_cidr_block="172.16.0.0/12",
+                transit_gateway_id=TransitGatewayId,
+            )
+            route_tablePublicRouteOnPrem2.add_depends_on(route_tablePublic)
+            route_tablePublicRouteOnPrem3 = _ec2.CfnRoute(
+                self, 
+                "route_tablePublicRouteOnPrem3",
+                route_table_id=route_tablePublic.attr_route_table_id,
+
+                # the properties below are optional
+                destination_cidr_block="192.168.0.0/16",
+                transit_gateway_id=TransitGatewayId,
+            )
+            route_tablePublicRouteOnPrem3.add_depends_on(route_tablePublic)                        

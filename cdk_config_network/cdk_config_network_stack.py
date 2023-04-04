@@ -468,3 +468,10 @@ class CdkConfigNetworkStack(Stack):
             ssmIAMRole.add_managed_policy(_iam.ManagedPolicy.from_aws_managed_policy_name("AmazonS3FullAccess"))
             ssmIAMRole.add_managed_policy(_iam.ManagedPolicy.from_aws_managed_policy_name("AmazonSSMManagedInstanceCore"))
             ssmIAMRole.apply_removal_policy(_removalpolicy.DESTROY)
+
+            instanceProfile = _iam.CfnInstanceProfile(
+                self, 
+                "instanceProfile",
+                roles=[ssmIAMRole],
+                instance_profile_name="AmazonEC2Role"
+            )            

@@ -67,7 +67,11 @@ class CdkConfigNetworkStack(Stack):
         OnNatGateway = True # True or Flase
 
         ## condition SSMRole
-        OnSSMRole = True # True or Flase    
+        OnSSMRole = True # True or Flase
+
+        ## condition SSMRole
+        OnPremRouting = True # True or Flase
+        TransitGatewayId = "tgw-0371801f7429127d3"
 
         #create VPC
         vpc = _ec2.CfnVPC(
@@ -367,7 +371,7 @@ class CdkConfigNetworkStack(Stack):
                 # vpc_endpoint_id="vpcEndpointId",
                 # vpc_peering_connection_id="vpcPeeringConnectionId"
             )
-            route_tablePrivateRoute.add_depends_on(route_tablePrivate)            
+            route_tablePrivateRoute.add_depends_on(route_tablePrivate)
 
         #vpc flow log        
         if OnFLowLog:
@@ -474,4 +478,36 @@ class CdkConfigNetworkStack(Stack):
                 "instanceProfile",
                 roles=[ssmIAMRole.role_name],
                 instance_profile_name="AmazonEC2Role"
-            )            
+            )
+
+        if OnPremRouting:
+            route_tablePrivateRouteOnPrem1 = _ec2.CfnRoute(
+                self, 
+                "route_tablePrivateRouteOnPrem1",
+                route_table_id=route_tablePrivate.attr_route_table_id,
+
+                # the properties below are optional
+                destination_cidr_block="10.0.0.0/8",
+                transit_gateway_id=TransitGatewayId,
+            )
+            route_tablePrivateRouteOnPrem1.add_depends_on(route_tablePrivate)
+            route_tablePrivateRouteOnPrem2 = _ec2.CfnRoute(
+                self, 
+                "route_tablePrivateRouteOnPrem2",
+                route_table_id=route_tablePrivate.attr_route_table_id,
+
+                # the properties below are optional
+                destination_cidr_block="172.16.0.0/12",
+                transit_gateway_id=TransitGatewayId,
+            )
+            route_tablePrivateRouteOnPrem2.add_depends_on(route_tablePrivate)
+            route_tablePrivateRouteOnPrem3 = _ec2.CfnRoute(
+                self, 
+                "route_tablePrivateRouteOnPrem3",
+                route_table_id=route_tablePrivate.attr_route_table_id,
+
+                # the properties below are optional
+                destination_cidr_block="192.168.0.0/16",
+                transit_gateway_id=TransitGatewayId,
+            )
+            route_tablePrivateRouteOnPrem3.add_depends_on(route_tablePrivate)            

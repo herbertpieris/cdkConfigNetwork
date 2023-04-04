@@ -64,7 +64,10 @@ class CdkConfigNetworkStack(Stack):
         OnFLowLog = True # True or Flase
 
         ## condition NatGateway
-        OnNatGateway = True # True or Flase        
+        OnNatGateway = True # True or Flase
+
+        ## condition SSMRole
+        OnSSMRole = True # True or Flase    
 
         #create VPC
         vpc = _ec2.CfnVPC(
@@ -450,4 +453,18 @@ class CdkConfigNetworkStack(Stack):
                     )],
                     traffic_type="ALL"
                 )
-                vpcFlowLog.apply_removal_policy(_removalpolicy.DESTROY)                
+                vpcFlowLog.apply_removal_policy(_removalpolicy.DESTROY)
+
+        # On SSMRole
+        if OnSSMRole:
+            # role
+            ssmIAMRole = _iam.Role(
+                    self,
+                    "ssmIAMRole",
+                    assumed_by=_iam.ServicePrincipal("ec2.amazonaws.com"),
+                    description="iam role ssm",
+                    role_name="AmazonEC2Role"
+                )
+            ssmIAMRole.add_managed_policy(_iam.ManagedPolicy.from_aws_managed_policy_name("AmazonS3FullAccess"))
+            ssmIAMRole.add_managed_policy(_iam.ManagedPolicy.from_aws_managed_policy_name("AmazonSSMManagedInstanceCore"))
+            ssmIAMRole.apply_removal_policy(_removalpolicy.DESTROY)

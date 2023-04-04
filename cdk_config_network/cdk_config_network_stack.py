@@ -87,7 +87,7 @@ class CdkConfigNetworkStack(Stack):
             vpcIgwName,
             tags=[_CfnTag(
                 key="Name",
-                value=vpcName
+                value=vpcIgwName
             )]                   
         )
         vpcIgw.apply_removal_policy(_removalpolicy.DESTROY)
@@ -122,7 +122,28 @@ class CdkConfigNetworkStack(Stack):
                 value=vpcName+"-"+"RouteTablePrivate"
             )]            
         )
-        route_tablePrivate.apply_removal_policy(_removalpolicy.DESTROY)
+        route_tablePrivate.apply_removal_policy(_removalpolicy.DESTROY)        
+
+        route_tablePublicRoute = _ec2.CfnRoute(
+            self, 
+            "route_tablePublicRoute",
+            route_table_id=route_tablePublic.attr_route_table_id,
+
+            # the properties below are optional
+            # carrier_gateway_id="carrierGatewayId",
+            destination_cidr_block="0.0.0.0/0",
+            # destination_ipv6_cidr_block="destinationIpv6CidrBlock",
+            # egress_only_internet_gateway_id="egressOnlyInternetGatewayId",
+            gateway_id=vpcIgw.attr_internet_gateway_id,
+            # instance_id="instanceId",
+            # local_gateway_id="localGatewayId",
+            # nat_gateway_id="natGatewayId",
+            # network_interface_id="networkInterfaceId",
+            # transit_gateway_id="transitGatewayId",
+            # vpc_endpoint_id="vpcEndpointId",
+            # vpc_peering_connection_id="vpcPeeringConnectionId"
+        )
+        route_tablePublicRoute.add_depends_on(route_tablePublic)
 
         #create subnet
         ## public
@@ -259,27 +280,6 @@ class CdkConfigNetworkStack(Stack):
         )
         subnetPrivate1b04RouteTableAssociation.apply_removal_policy(_removalpolicy.DESTROY)
 
-        route_tablePublicRoute = _ec2.CfnRoute(
-            self, 
-            "route_tablePublicRoute",
-            route_table_id=route_tablePublic.attr_route_table_id,
-
-            # the properties below are optional
-            # carrier_gateway_id="carrierGatewayId",
-            destination_cidr_block="0.0.0.0/0",
-            # destination_ipv6_cidr_block="destinationIpv6CidrBlock",
-            # egress_only_internet_gateway_id="egressOnlyInternetGatewayId",
-            gateway_id=vpcIgw.attr_internet_gateway_id,
-            # instance_id="instanceId",
-            # local_gateway_id="localGatewayId",
-            # nat_gateway_id="natGatewayId",
-            # network_interface_id="networkInterfaceId",
-            # transit_gateway_id="transitGatewayId",
-            # vpc_endpoint_id="vpcEndpointId",
-            # vpc_peering_connection_id="vpcPeeringConnectionId"
-        )
-        route_tablePublicRoute.add_depends_on(route_tablePublic)
-
         ## private gwlb
         if OnGWLBeSubnet:
             subnetPrivateGWLB1a = _ec2.CfnSubnet(
@@ -320,7 +320,7 @@ class CdkConfigNetworkStack(Stack):
 
             subnetPrivateGWLB1bRouteTableAssociation = _ec2.CfnSubnetRouteTableAssociation(
                 self,
-                "subnetPrivateGWLB1bRouteTbleAssociation",
+                "subnetPrivateGWLB1bRouteTableAssociation",
                 route_table_id=route_tablePrivate.ref,
                 subnet_id=subnetPrivateGWLB1b.attr_subnet_id
             )

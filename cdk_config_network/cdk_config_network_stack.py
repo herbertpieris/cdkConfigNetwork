@@ -472,6 +472,6 @@ class CdkConfigNetworkStack(Stack):
             instanceProfile = _iam.CfnInstanceProfile(
                 self, 
                 "instanceProfile",
-                roles=[ssmIAMRole.role_arn],
+                roles=[ssmIAMRole.role_name],
                 instance_profile_name="AmazonEC2Role"
             )            
